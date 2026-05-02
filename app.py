@@ -1,4 +1,6 @@
 import streamlit as st
+from agents.intake_agent import process_documents
+from agents.validation_agent import validate_claim
 
 st.set_page_config(page_title="AI Claim Processing", layout="wide")
 
@@ -13,4 +15,12 @@ if uploaded_files:
     st.success(f"{len(uploaded_files)} files uploaded successfully")
 
     if st.button("Process Claim"):
-        st.write("Running agents...")
+
+        intake_result = process_documents(uploaded_files)
+        validation_result = validate_claim(intake_result)
+
+        st.subheader("Intake Agent Output")
+        st.json(intake_result)
+
+        st.subheader("Validation Agent Output")
+        st.json(validation_result)
